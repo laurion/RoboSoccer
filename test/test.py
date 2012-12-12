@@ -11,14 +11,13 @@ from struct import *
 ##        lw = int(raw_input('lw:'))
 ##        rw = int(raw_input('rw='))
 ##        do_stuff(lw,rw)
-client = mosquitto.Mosquitto("Feliz Navidad")
-client.connect("localhost")#192.168.1.72
+
+
 
 teren =[ [ 0 for i in range(5) ] for j in range(5) ]
 def thread1():
-        
-    
-        
+    client = mosquitto.Mosquitto("Feliz Navidad1")
+    client.connect("localhost")#192.168.1.72   
     def on_message(msgmosq, obj, msg):
             global teren
             mesaj = unpack('iiiii', msg.payload)
@@ -37,7 +36,6 @@ def thread1():
             #if(x== 1055):
             #       do_stuff(255,255)
 
-    global client
     client.subscribe("coords", 2)
     client.on_message = on_message
     while client.loop() == 0:
@@ -47,6 +45,8 @@ def salut():
     print "Salut din afara 2"
 
 def thread2():
+    client2 = mosquitto.Mosquitto("Feliz Navidad2")
+    client2.connect("localhost")#192.168.1.72
     ok=0
     salut()
     while ok==0:
@@ -57,10 +57,10 @@ def thread2():
             
             
     def do_stuff(lw, rw,id):
-        global client
+        global client2
         msg = pack('iii', lw, rw, 0)
         print msg
-        client.publish(id, msg)
+        client2.publish(id, msg)
 
 try:
    thread.start_new_thread( thread1, () )
@@ -68,10 +68,6 @@ try:
 except:
    print "Error: unable to start thread"
 
-
-
-    
- 
 while 1:
    pass
 
