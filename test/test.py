@@ -17,14 +17,14 @@ from struct import *
 teren =[ [ 0 for i in range(5) ] for j in range(13) ]
 def thread1():
     client = mosquitto.Mosquitto("Feliz Navidad1")
-    client.connect("localhost")#192.168.1.72   
+    client.connect("192.168.1.72")#192.168.1.72   
     def on_message(msgmosq, obj, msg):
             global teren
             mesaj = unpack('iiiii', msg.payload)
             print mesaj
             print "    "
             for i in range(0,4):
-                teren[mesaj[0]-1][i] = mesaj[i]
+                teren[mesaj[0]][i] = mesaj[i]
             print teren
                     
             #id,x,y,grad,t = unpack('iiiii', msg.payload)
@@ -46,12 +46,12 @@ def salut():
 
 def thread2():
     client2 = mosquitto.Mosquitto("Feliz Navidad2")
-    client2.connect("localhost")#192.168.1.72
+    client2.connect("192.168.1.72")#192.168.1.72
     ok=0
     salut()
     while ok==0:
         global teren
-        if teren[4][0] == 5:
+        if teren[4][0] == 4:
             print "l-am gasit cu thread 2  "
             ok=1
             
