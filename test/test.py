@@ -14,7 +14,7 @@ from struct import *
 client = mosquitto.Mosquitto("Feliz Navidad")
 client.connect("localhost")#192.168.1.72
 
-teren =[ [ 0 for i in range(5) ] for j in range(5) ]
+teren =[ [ 0 for i in range(13) ] for j in range(13) ]
 def thread1():
         
     
