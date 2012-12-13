@@ -2,14 +2,29 @@
 
 ## Resurse
 
+http://www.cp.eng.chula.ac.th/~vishnu/gameResearch/AI_november_2005/An%20Application%20of%20Neural%20Networks%20in%20Learning%20of%20RoboCup%20Soccer%20Playing%20Team%20Strategy.pdf
+
+---
+http://translate.google.com/translate?u=http://code.google.com/p/fira-mirosot-robot/
+http://translate.google.com/translate?u=http://code.google.com/p/fira-mirosot-robot/downloads/list
+
+---
 http://www.cs.cmu.edu/~pstone/RoboCup/ATTCMUnited2000-sim.html
 http://www.cs.cmu.edu/afs/cs/project/robosoccer/www/small/
 
+---
 curs si carte: 
   * http://www.cs.utexas.edu/users/pstone/Courses/344Mfall10/index.html
   * http://www.cs.ox.ac.uk/people/michael.wooldridge/pubs/imas/IMAS2e.html
 
+---
 manual simulator: http://sourceforge.net/apps/mediawiki/sserver/index.php?title=Users_Manual/Soccer_Server
+
+---
+http://cdn.intechopen.com/pdfs/539/InTech-Multicriterial_decision_making_control_of_the_robot_soccer_team.pdf
+http://robogames.net/symposium/2007/07-105-Kotzian-UnivOstrava-MirosotSoccerComplexSystem.pdf
+http://www.cp.eng.chula.ac.th/~vishnu/gameResearch/AI_november_2005/An%20Application%20of%20Neural%20Networks%20in%20Learning%20of%20RoboCup%20Soccer%20Playing%20Team%20Strategy.pdf
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.66.5433&rep=rep1&type=pdf
 
 ### exemple
 https://github.com/jasontbradshaw/soccerpy
