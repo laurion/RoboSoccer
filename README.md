@@ -1,7 +1,24 @@
+# Shrinkers
+
+## Resurse
+
+http://www.cs.cmu.edu/~pstone/RoboCup/ATTCMUnited2000-sim.html
+http://www.cs.cmu.edu/afs/cs/project/robosoccer/www/small/
+
+curs si carte: 
+  * http://www.cs.utexas.edu/users/pstone/Courses/344Mfall10/index.html
+  * http://www.cs.ox.ac.uk/people/michael.wooldridge/pubs/imas/IMAS2e.html
+
+manual simulator: http://sourceforge.net/apps/mediawiki/sserver/index.php?title=Users_Manual/Soccer_Server
+
+### exemple
+https://github.com/jasontbradshaw/soccerpy
+https://github.com/hahn/bloodymarysot
+
+
+
 FotbalRobotic
 =============
-
-FotbalRobotic.ro
 
 Prezentare MQTT:   https://docs.google.com/presentation/d/1B8m3zq4aokjhvYKi9-Jdrvx44ONbNFrP2mTVDvivu1M/edit
 
