@@ -105,7 +105,7 @@ int travel (char* idid, int id, int x, int y)
 	printf ("unghi robot: %lf \n\n", (double)coordrob[id].angle);
 	int c= x - coordrob[id].x;
 	int b= y - coordrob[id].y;
-	float distance = sqrt (b*b + c*c);
+	float distance = b*b + c*c;
 
 	printf ("diferenta = %d", abs(coordrob[id].angle - m));
 	if (abs(coordrob[id].angle - m) > 30)
@@ -115,7 +115,7 @@ int travel (char* idid, int id, int x, int y)
 		ctr[id].time = 50;
 	}
 	else
-		if (distance < 20) {ctr[id].right = 0; ctr[id].left = 0;}
+		if (distance < 20*20) {ctr[id].right = 0; ctr[id].left = 0;}
 		else
 		{
 			ctr[id].right = 80;
@@ -123,7 +123,7 @@ int travel (char* idid, int id, int x, int y)
 			ctr[id].time = 100;
 
 		}
-	printf("\n distance: %lf", distance);
+	printf("\n distanta la patrat: %lf", distance);
 	return distance;
 }
 
