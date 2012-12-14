@@ -17,11 +17,16 @@
 
 #define mqtt_host "192.168.1.72"
 #define mqtt_port 1883
+
 //ale mele
+
+#define PI acos(-1)
+
 #define ypsus 280
 #define ypjos 420
 #define portar 4
 #define idportar "in4"
+
 #define minge 0
 #define idminge "in0"
 #define fundas 9
@@ -95,7 +100,7 @@ int travel (char* idid, int id, int x, int y)
 	printf("coord rob x: %d \n\n\n", coordrob[id].x);
 
 	m = atan2((double)(y - coordrob[id].y), (double)(x - coordrob[id].x));
-	m = m * 180 / 3.1415;    m = m + 180;
+	m = m * 180 / PI;    m = m + 180;
 	printf ("panta: %lf \n \n \n" , m);
 	printf ("unghi robot: %lf \n\n", (double)coordrob[id].angle);
 	int c= x - coordrob[id].x;
