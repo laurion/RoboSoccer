@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
+#include <sys/time.h>
 
 #ifndef WIN32
 # include <unistd.h>
@@ -250,9 +252,13 @@ void progatacant()
 
 int main(int argc, char *argv[])
 {
+    struct timeval tv;
 	char clientid[24]="FcBitu'";
 	int rc = 0;
-	double xtimp;
+	time_t result1,result2;
+    gettimeofday(&tv, NULL);
+    result1=tv.tv_usec / 100;
+
 	signal(SIGINT, handle_signal);
 	signal(SIGTERM, handle_signal);
 	mosquitto_lib_init();
@@ -263,7 +269,6 @@ int main(int argc, char *argv[])
 		mosquitto_message_callback_set(mosq, message_callback);
 		rc = mosquitto_connect(mosq, mqtt_host, mqtt_port, 60);
 		mosquitto_subscribe(mosq, NULL, "coords", 0);
-		xtimp = coordrob[minge].timestamp;
 		mosquitto_loop_start(mosq);
 
 		while(run){
@@ -272,7 +277,9 @@ int main(int argc, char *argv[])
 				printf ("\n run: %d   rc: %d  \n", run,rc);
 				mosquitto_reconnect(mosq);
 			}
-			// incepe softul propriuzis
+			gettimeofday(&tv, NULL);
+            result2=tv.tv_usec / 100;
+            // incepe softul propriuzis
 			printf("robot: timestamp: %d     X: %d        Y: %d    unghi: %d\n ",coordrob[4].timestamp,coordrob[4] .x,coordrob[4].y,coordrob[4].angle);
 			printf("minge: timestamp: %d     X: %d        Y: %d    unghi: %d\n ",coordrob[0].timestamp,coordrob[0] .x,coordrob[0].y,coordrob[0].angle);
 			progportar();
@@ -280,12 +287,26 @@ int main(int argc, char *argv[])
 			//  progmijlocasiatacant();
 			//  mosquitto_publish(mosq, &mid, idportar, sizeof(struct control), &ctr[portar], 0, false);
 			//  printf ("comenzi robot: ctr.right: %d  ctr.left: %d timestamp: %d\n", ctr[portar].right,ctr[portar].left,coordrob[0].timestamp);
+        printf("\n\ntimpinitial: %d      timpfinal: %d\n\n", result1, result2);
 
-			mosquitto_publish(mosq, &mid, idportar, sizeof(struct control), &ctr[portar], 0, false);
-			/*mosquitto_publish(mosq, &mid, idfundas, sizeof(struct control), &ctr[fundas], 0, false);
-    mosquitto_publish(mosq, &mid, idatacant, sizeof(struct control), &ctr[atacant], 0, false);
-			 */
-			printf ("comenzi robot: ctr.right: %d  ctr.left: %d timestamp: %d\n", ctr[portar].right,ctr[portar].left,coordrob[0].timestamp);
+		if ((result1 > result2) && (result1 > 5000))
+            {
+                int aux;
+                aux = result1;
+                result1 = result2;
+                result2 = aux;
+            }
+            else
+                if (result2 - result1 > 3000)
+                    {
+                    result1 = result2;
+                     mosquitto_publish(mosq, &mid, idportar, sizeof(struct control), &ctr[portar], 0, false);
+                     	printf ("comenzi robot: ctr.right: %d  ctr.left: %d timestamp: %d\n", ctr[portar].right,ctr[portar].left,coordrob[0].timestamp);
+
+                    /*mosquitto_publish(mosq, &mid, idfundas, sizeof(struct control), &ctr[fundas], 0, false);
+                    mosquitto_publish(mosq, &mid, idatacant, sizeof(struct control), &ctr[atacant], 0, false);
+                     */
+                    }
 			/*printf ("comenzi robot: ctr.right: %d  ctr.left: %d timestamp: %d\n", ctr[fundas].right,ctr[fundas].left,coordrob[0].timestamp);
     printf ("comenzi robot: ctr.right: %d  ctr.left: %d timestamp: %d\n", ctr[atacant].right,ctr[atacant].left,coordrob[0].timestamp);
 			 */
@@ -293,20 +314,20 @@ int main(int argc, char *argv[])
 			//travel ("in4", 4,coordrob[minge].x,coordrob[minge].y);
 			//mosquitto_publish(mosq, &mid, "in4", sizeof(struct control), &ctr[4], 0, false);
 			//printf ("comenzi robot: ctr.right: %d  ctr.left: %d timestamp: %d\n", ctr[4].right,ctr[4].left,coordrob[4].timestamp);
-			if (xtimp != coordrob[minge].timestamp)
+			/*if (xtimp != coordrob[minge].timestamp)
 			{
 				xtimp = coordrob[minge].timestamp;
 				usleep(200000);
 			}
 			else
 			{
-				usleep (15000);
-			}
+				usleep (150000);
+			}*/
+		//	usleep(200000);
 			fflush(stdout);
-			//rc = mosquitto_loop(mosq, 1, 1);
-			ctr[portar].right = 0;
+         /*   ctr[portar].right = 0;
 			ctr[portar].left = 0;
-			ctr[portar].time = 10;
+			ctr[portar].time = 10;*/
 		}
 		mosquitto_destroy(mosq);
 	}
