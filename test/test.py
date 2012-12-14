@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import thread 
+import thread
 import sys
 import mosquitto
 import time
