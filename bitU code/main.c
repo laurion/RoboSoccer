@@ -20,14 +20,13 @@
 
 //ale mele
 
-#define PI acos(-1)
+#define PI 3.1415
 #define corectie 15
 #define tcorectie 30
-
 #define ypsus 280
 #define ypjos 420
-#define portar 10
-#define idportar "in10"
+#define portar 92
+#define idportar "in92"
 
 #define minge 0
 #define idminge "in0"
@@ -45,6 +44,7 @@
 #define ypjosa 481
 #define ypcentrua 378
 #define xpa 123
+#define timpmiscareportar 0
 #define coordonateinitialefundasx 300
 
 
@@ -84,55 +84,135 @@ void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_
 	coordrob[coordonate->id].x = coordonate->x;
 	coordrob[coordonate->id].y = coordonate->y;
 }
+void progportar ()
+{   /*if (coordrob[minge].x > 430)   //se schimba daca jucam in partea dreapta
+        {if (coordrob[portar].x > xpoarta + 15)
+            {
+                if (coordrob[portar].angle < 270 && coordrob[portar].angle > 90)
+                    {
+                        ctr[portar].right = 70;
+                        ctr[portar].left = 70;
+                        ctr[portar].time = timpmiscareportar;
+                    }
+                    else
+                    {
+                        ctr[portar].right = -70;
+                        ctr[portar].left = -70;
+                        ctr[portar].time = timpmiscareportar;
+                    }
+            }
+        if (coordrob[portar].angle > 285) {ctr[portar].right= -50; ctr[portar].left= 50;ctr[portar].time=30;
+                                           }
+        if (coordrob[portar].angle < 255) {ctr[portar].right= 50; ctr[portar].left= -50; ctr[portar].time = 30;
+                                           }
+        }
+        else
+    {*/printf ("\n portar x:%d    y:%d    \n'\n",coordrob[portar].x,coordrob[portar].y);
+    if ((abs(coordrob[portar].y - ypsus)< 15)   && (coordrob[minge].y < coordrob[portar].y))
+        {
+            ctr[portar].right = 0;
+            ctr[portar].left = 0;
+            ctr[portar].time = timpmiscareportar;
+        }
+        else
+            if((coordrob[portar].y - ypsus > 15) && (coordrob[minge].y < coordrob[portar].y))
+                {
+                    ctr[portar].right = -50;
+                    ctr[portar].left = -50;
+                    ctr[portar].time = timpmiscareportar;
+                }
+    if ((abs(coordrob[portar].y - ypjos) < 15)  && (coordrob[minge].y > coordrob[portar].y))
+        {
+            ctr[portar].right = 0;
+            ctr[portar].left = 0;
+            ctr[portar].time = timpmiscareportar;
+        }
+        else
+            if ((coordrob[portar].y - ypjos < -15)  && (coordrob[minge].y > coordrob[portar].y))
+                {
+                    ctr[portar].right = 50;
+                    ctr[portar].left = 50;
+                    ctr[portar].time = timpmiscareportar;
+                }
 
-float eroare;
+    if ((coordrob[minge].y < ypjos) && (coordrob[minge].y > ypsus))
+        if (coordrob[portar].y > coordrob[minge].y)
+            {
+                ctr[portar].right = -40; ctr[portar].left = -40; ctr[portar].time = timpmiscareportar;
+            }
+        if (coordrob[portar].y < coordrob[minge].y)
+            {
+                ctr[portar].right = 40; ctr[portar].left = 40;ctr[portar].time = timpmiscareportar;
+            }
 
-void mergi_drept(int id, int putere, int unghi_dorit)
-{
-    eroare= unghi_dorit - coordrob[id].angle;
+    if (ypsus - coordrob[portar].y >15)
+        {
+            ctr[portar].left = 40;
+            ctr[portar].right = 40;
+            ctr[portar].time = timpmiscareportar;
+        }
+    if (coordrob[portar].y - ypjos > 15)
+        {
+            ctr[portar].left = -40;
+            ctr[portar].right = -40;
+            ctr[portar].time = timpmiscareportar;
+        }
+    //}
+}
 
-if((unghi_dorit>90 ) && (unghi_dorit<270))
-{
-	if (eroare<0)
-	{
-		ctr[id].left  = putere + corectie;
-		ctr[id].right = putere - corectie;
-		ctr[id].time   = tcorectie;
-	}
-	else
-	{
-		ctr[id].left  = putere - corectie;
-		ctr[id].right = putere +corectie;
-		ctr[id].time   = tcorectie;
-	}
-}
-else
-{
-	if (eroare<0)
-	{
-		ctr[id].left  = putere - corectie;
-		ctr[id].right = putere + corectie;
-		ctr[id].time   = tcorectie;
-	}
-	else
-	{
-		ctr[id].left  = putere + corectie;
-		ctr[id].right = putere - corectie;
-		ctr[id].time   = tcorectie;
-	}
-}
-}
+
+
 int unghiuldorit(int id,int x,int y)
 {
     double m;
 	m = atan2((double)(y - coordrob[id].y), (double)(x - coordrob[id].x));
-	m = m * 180 / PI;   m = m + 180;
-	printf ("panta: %lf        unghi: %d\n \n \n" , m, coordrob[portar].angle);
+	m = m * 180 / PI;
+	printf ("panta: %lf        unghi: %d\n \n \n" , m, coordrob[atacant].angle);
 	return m;
 
 }
 
+void mergi_drept(int id, int putere, int unghi_dorit)
+{ /*  int dist2 = distanta(coordrob[id].x,coordrob[id].y,coordrob[minge].x,coordrob[minge].y);
 
+    while (dist2 > 20)
+    {*/
+    int eroare= unghi_dorit - coordrob[id].angle;
+
+    if((unghi_dorit>90 ) && (unghi_dorit<270))
+    {
+        if (eroare<0)
+        {
+            ctr[id].left  = putere + corectie;
+            ctr[id].right = putere - corectie;
+            ctr[id].time   = tcorectie;
+        }
+        else
+        {
+            ctr[id].left  = putere - corectie;
+            ctr[id].right = putere +corectie;
+            ctr[id].time   = tcorectie;
+        }
+    }
+    else
+    {
+        if (eroare<0)
+        {
+            ctr[id].left  = putere - corectie;
+            ctr[id].right = putere + corectie;
+            ctr[id].time   = tcorectie;
+        }
+        else
+        {
+            ctr[id].left  = putere + corectie;
+            ctr[id].right = putere - corectie;
+            ctr[id].time   = tcorectie;
+        }
+    }
+    /*dist2 = distanta(coordrob[id].x,coordrob[id].y,coordrob[minge].x,coordrob[minge].y);
+
+    }
+*/}
 
 int travel (char* idid, int id, int x, int y)
 {
@@ -152,19 +232,21 @@ int travel (char* idid, int id, int x, int y)
 	return distance;
 }
 
-
 void calculate_robot_next_movement() {
     //Orienteaza-te la un anumit unghi
     struct robotCoords thisR = coordrob[atacant];
-    double m = unghiuldorit(minge, coordrob[atacant].y,coordrob[atacant].x);
+    double m = unghiuldorit(minge, coordrob[atacant].x,coordrob[atacant].y);
     // Vreau la 90deg
     if(thisR.angle> m - 25 && thisR.angle < m + 25) {
-            mergi_drept(atacant,80,m);
+            //mergi_drept(atacant,100,m);
+            travel(idatacant,atacant,coordrob[minge].x,coordrob[minge].y);
         } else {
-                ctr[atacant].left = 60;
-                ctr[atacant].right = 0;
-                ctr[atacant].time = 50;
+                ctr[atacant].left = 50;
+                ctr[atacant].right = -20;
+                ctr[atacant].time = 30;
                 }
+
+    progportar();
 }
 
 void do_robot_control_loop() {
@@ -176,6 +258,7 @@ void do_robot_control_loop() {
     calculate_robot_next_movement();
 
     mosquitto_publish(mosq, &mid, idatacant, sizeof(struct control), &ctr[atacant], 0, false);
+    mosquitto_publish(mosq, &mid, idportar, sizeof(struct control), &ctr[portar], 0, false);
     //mosquitto_loop(mosq, 1, 50);
     gettimeofday(&tv, NULL);
 }
@@ -202,17 +285,14 @@ int main(int argc, char *argv[])
 	signal(SIGTERM, handle_signal);
 	mosquitto_lib_init();
 	mosq = mosquitto_new(clientid, true, NULL);
-    gettimeofday(&tv,NULL);
-    printf ("%d nirephngep\n\n\n",&tv.tv_usec);
-	if(mosq){
+ 	if(mosq){
 		mosquitto_connect_callback_set(mosq, connect_callback);
 		mosquitto_message_callback_set(mosq, message_callback);
 		rc = mosquitto_connect(mosq, mqtt_host, mqtt_port, 60);
 		mosquitto_subscribe(mosq, NULL, "coords", 0);
 		mosquitto_loop_start(mosq);
         gettimeofday(&tv,NULL);
-
-		while(run){
+    	while(run){
 			if(run && rc){
 				sleep(2);
 				printf ("\n run: %d   rc: %d  \n", run,rc);
@@ -223,6 +303,7 @@ int main(int argc, char *argv[])
 
             if(need_to_send())
                 {
+                printf ("coaieieeeeeieeieiie \n\n\n");
                 do_robot_control_loop();
                 }
 		    fflush(stdout);
