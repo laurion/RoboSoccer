@@ -79,25 +79,35 @@ void connect_callback(struct mosquitto *mosq, void *obj, int result)
 void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
 	struct robotCoords *coordonate = (struct robotCoords *)message->payload;
-	if (coordonate->id == 0)
-        {if (coordonate->x != 0 && coordonate->y != 0)
-            {
-            coordrob[coordonate->id].angle = coordonate->angle;
-            coordrob[coordonate->id].timestamp = coordonate->timestamp;
-            coordrob[coordonate->id].x = coordonate->x;
-            coordrob[coordonate->id].y = coordonate->y;
+	if (coordonate->id == minge)
+	{if (coordonate->x != 0 && coordonate->y != 0)
+	{
+		coordrob[coordonate->id].angle = coordonate->angle;
+		coordrob[coordonate->id].timestamp = coordonate->timestamp;
+		coordrob[coordonate->id].x = coordonate->x;
+		coordrob[coordonate->id].y = coordonate->y;
 
-         //       printf ("coord %d", coordrob[coordonate->id].x);
-            }
-        }
-        else
-            {
-            coordrob[coordonate->id].angle = coordonate->angle;
-            coordrob[coordonate->id].timestamp = coordonate->timestamp;
-            coordrob[coordonate->id].x = coordonate->x;
-            coordrob[coordonate->id].y = coordonate->y;
-            }
+		//       printf ("coord %d", coordrob[coordonate->id].x);
+	}
+	}
+	else
+	{
+		coordrob[coordonate->id].angle = coordonate->angle;
+		coordrob[coordonate->id].timestamp = coordonate->timestamp;
+		coordrob[coordonate->id].x = coordonate->x;
+		coordrob[coordonate->id].y = coordonate->y;
+	}
 
+}
+int cadran(int x, int y) {
+	if (x > 0 && y > 0)
+		return 1;
+	if (x < 0 && y > 0)
+		return 2;
+	if (x < 0 && y < 0)
+		return 3;
+	if (x > 0 && y < 0)
+		return 4;
 }
 void progportar ()
 {   /*if (coordrob[minge].x > 430)   //se schimba daca jucam in partea dreapta
@@ -254,16 +264,15 @@ void calculate_robot_next_movement() {
 	struct robotCoords thisR = coordrob[atacant];
 	double m = unghiuldorit(minge, coordrob[atacant].x,coordrob[atacant].y);
 	// Vreau la 90deg
-	if (coordrob[atacant].y < coordrob[minge].y)
 	if((thisR.angle> (m - 15)) && (thisR.angle < (m + 15))) {
-			//mergi_drept(atacant,100,m);
-			travel(idatacant,atacant,coordrob[minge].x,coordrob[minge].y);
-		}
-		else {
-			ctr[atacant].left = 70;
-			ctr[atacant].right = -20;
-			ctr[atacant].time = 30;
-		}
+		//mergi_drept(atacant,100,m);
+		travel(idatacant,atacant,coordrob[minge].x,coordrob[minge].y);
+	}
+	else {
+		ctr[atacant].left = 70;
+		ctr[atacant].right = -20;
+		ctr[atacant].time = 30;
+	}
 	progportar();
 }
 
