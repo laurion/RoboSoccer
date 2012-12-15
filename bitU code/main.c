@@ -79,12 +79,25 @@ void connect_callback(struct mosquitto *mosq, void *obj, int result)
 void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
 	struct robotCoords *coordonate = (struct robotCoords *)message->payload;
-	if(id || coordrob[coordonate->id] || coordrob[coordonate->id]){
-		coordrob[coordonate->id].angle = coordonate->angle;
-		coordrob[coordonate->id].timestamp = coordonate->timestamp;
-		coordrob[coordonate->id].x = coordonate->x;
-		coordrob[coordonate->id].y = coordonate->y;
-	}
+	if (coordonate->id == 0)
+        {if (coordonate->x != 0 && coordonate->y != 0)
+            {
+            coordrob[coordonate->id].angle = coordonate->angle;
+            coordrob[coordonate->id].timestamp = coordonate->timestamp;
+            coordrob[coordonate->id].x = coordonate->x;
+            coordrob[coordonate->id].y = coordonate->y;
+
+         //       printf ("coord %d", coordrob[coordonate->id].x);
+            }
+        }
+        else
+            {
+            coordrob[coordonate->id].angle = coordonate->angle;
+            coordrob[coordonate->id].timestamp = coordonate->timestamp;
+            coordrob[coordonate->id].x = coordonate->x;
+            coordrob[coordonate->id].y = coordonate->y;
+            }
+
 }
 void progportar ()
 {   /*if (coordrob[minge].x > 430)   //se schimba daca jucam in partea dreapta
