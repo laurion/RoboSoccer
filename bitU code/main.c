@@ -135,7 +135,8 @@ void progportar ()
                                                    }
                 }
         else
-    {printf ("\n portar x:%d    y:%d    \n'\n",coordrob[portar].x,coordrob[portar].y);
+    {
+    //printf ("\n portar x:%d    y:%d    \n'\n",coordrob[portar].x,coordrob[portar].y);
     if ((abs(coordrob[portar].y - ypsus)< 15)  && (coordrob[minge].y < coordrob[portar].y))
     {
     	ctr[portar].right = 0;
@@ -237,6 +238,8 @@ void calculate_robot_next_movement() {
 	struct robotCoords thisR = coordrob[atacant];
 	double m = unghiuldorit(minge, coordrob[atacant].x,coordrob[atacant].y);
 	double m2 = unghiuldorit(minge, coordrob[fundas].x,coordrob[fundas].y);
+
+
 	// Vreau la m/m2 deg
 	if((thisR.angle> (m - 15)) && (thisR.angle < (m + 15))) {
 			travel(idatacant,atacant,coordrob[minge].x,coordrob[minge].y);
@@ -255,6 +258,74 @@ void calculate_robot_next_movement() {
                         ctr[atacant].time = 30;
                     }
             }
+    if (coordrob[atacant].y < yminim)                               //asta nu se schimba daca schimbat portile
+        {
+        if (coordrob[atacant].angle > 180 && coordrob[atacant].angle < 360)
+                {
+                    ctr[atacant].left = 80;
+                    ctr[atacant].right = 80;
+                    ctr[atacant].time = 0;
+                }
+                else
+                    {
+                        if (coordrob[atacant].angle < 180)
+                            {
+                                ctr[atacant].left = -80;
+                                ctr[atacant].right = -80;
+                                ctr[atacant].time = 0;
+                            }
+                    }
+        }
+    if (coordrob[atacant].y > ymax)                                                 //asta nu se schimba daca schimbat portile
+        {
+            if (coordrob[atacant].angle > 180 && coordrob[atacant].angle < 360)
+                {
+                    ctr[atacant].left = -80;
+                    ctr[atacant].right = -80;
+                    ctr[atacant].time = 0;
+                }
+                else
+                    {
+                        if (coordrob[atacant].angle < 180)
+                            {
+                                ctr[atacant].left = 80;
+                                ctr[atacant].right = 80;
+                                ctr[atacant].time = 0;
+                            }
+                    }
+        }
+    if (coordrob[atacant].x < xminim)                                                   //asta nu se schimba daca schimbat portile
+        {
+            if (coordrob[atacant].angle > 90 && coordrob[atacant].angle < 270)
+                {
+                    ctr[atacant].left = -80;
+                    ctr[atacant].right = -80;
+                    ctr[atacant].time = 0;
+                }
+                else
+                    {
+                    ctr[atacant].left = 80;
+                    ctr[atacant].right = 80;
+                    ctr[atacant].time = 0;
+                    }
+        }
+
+    if (coordrob[atacant].x > xmaxim)                                   //asta nu se schimba daca schimbat portile
+        {
+            if (coordrob[atacant].angle > 90 && coordrob[atacant].angle < 270)
+                {
+                    ctr[atacant].left = 80;
+                    ctr[atacant].right = 80;
+                    ctr[atacant].time = 0;
+                }
+                else
+                    {
+                    ctr[atacant].left = -80;
+                    ctr[atacant].right = -80;
+                    ctr[atacant].time = 0;
+                    }
+        }
+
     if((coordrob[fundas].angle> (m2 - 15)) && (coordrob[fundas].angle < (m2 + 15))) {
 			travel(idfundas,fundas,coordrob[minge].x,coordrob[minge].y);
 		}
@@ -272,7 +343,75 @@ void calculate_robot_next_movement() {
                     ctr[fundas].time = 30;
                     }
             }
+     if (coordrob[fundas].y < yminim)                   //asta nu se schimba daca schimbat portile
+        {
+            if (coordrob[fundas].angle > 180 && coordrob[fundas].angle < 360)
+                {
+                    ctr[fundas].left = 80;
+                    ctr[fundas].right = 80;
+                    ctr[fundas].time = 0;
+                }
+                else
+                    {
+                        if (coordrob[fundas].angle < 180)
+                            {
+                                ctr[fundas].left = -80;
+                                ctr[fundas].right = -80;
+                                ctr[fundas].time = 0;
+                            }
+                    }
+        }
+    if (coordrob[fundas].y > ymax)                          //asta nu se schimba daca schimbat portile
+        {
+            if (coordrob[fundas].angle > 180 && coordrob[fundas].angle < 360)
+                {
+                    ctr[fundas].left = -80;
+                    ctr[fundas].right = -80;
+                    ctr[fundas].time = 0;
+                }
+                else
+                    {
+                        if (coordrob[fundas].angle < 180)
+                            {
+                                ctr[fundas].left = 80;
+                                ctr[fundas].right = 80;
+                                ctr[fundas].time = 0;
+                            }
+                    }
+        }
+	if (coordrob[fundas].x < xminim)                                //asta nu se schimba daca schimbat portile
+        {
+            if (coordrob[fundas].angle > 90 && coordrob[fundas].angle < 270)
+                {
+                    ctr[fundas].left = -80;
+                    ctr[fundas].right = -80;
+                    ctr[fundas].time = 0;
+                }
+                else
+                    {
+                    ctr[fundas].left = 80;
+                    ctr[fundas].right = 80;
+                    ctr[fundas].time = 0;
+                    }
+        }
+    if (coordrob[fundas].x > xmaxim)                        //asta nu se schimba daca schimbat portile
+        {
+            if (coordrob[fundas].angle > 90 && coordrob[fundas].angle < 270)
+                {
+                    ctr[fundas].left = 80;
+                    ctr[fundas].right = 80;
+                    ctr[fundas].time = 0;
+                }
+                else
+                    {
+                    ctr[fundas].left = -80;
+                    ctr[fundas].right = -80;
+                    ctr[fundas].time = 0;
+                    }
+        }
+
 	progportar();
+
 }
 
 void do_robot_control_loop() {
