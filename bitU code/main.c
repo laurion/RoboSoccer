@@ -25,16 +25,15 @@
 #define tcorectie 30
 #define ypsus 280
 #define ypjos 420
-#define portar 92
-#define idportar "in92"
-
+#define portar 9
+#define idportar "in9"
 #define minge 0
 #define idminge "in0"
-#define fundas 9
-#define idfundas "in9"
+#define fundas 92
+#define idfundas "in92"
 #define limfundas 325
-#define atacant 10
-#define idatacant "in10"
+#define atacant 102
+#define idatacant "in102"
 #define limatacant 700
 #define xpoarta 116
 #define xfundas 176
@@ -78,7 +77,7 @@ void connect_callback(struct mosquitto *mosq, void *obj, int result)
 
 void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
-	struct robotCoords *coordonate = (struct robotCoords *)message->payload;
+    struct robotCoords *coordonate = (struct robotCoords *)message->payload;
 	if (coordonate->id == 0)
         {if (coordonate->x != 0 && coordonate->y != 0)
             {
@@ -86,8 +85,6 @@ void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_
             coordrob[coordonate->id].timestamp = coordonate->timestamp;
             coordrob[coordonate->id].x = coordonate->x;
             coordrob[coordonate->id].y = coordonate->y;
-
-         //       printf ("coord %d", coordrob[coordonate->id].x);
             }
         }
         else
@@ -100,7 +97,7 @@ void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_
 
 }
 void progportar ()
-{   /*if (coordrob[minge].x > 430)   //se schimba daca jucam in partea dreapta
+{   if (coordrob[minge].x > 430)   //se schimba daca jucam in partea dreapta
         {if (coordrob[portar].x > xpoarta + 15)
             {
                 if (coordrob[portar].angle < 270 && coordrob[portar].angle > 90)
@@ -116,13 +113,29 @@ void progportar ()
                         ctr[portar].time = timpmiscareportar;
                     }
             }
-        if (coordrob[portar].angle > 285) {ctr[portar].right= -50; ctr[portar].left= 50;ctr[portar].time=30;
-                                           }
-        if (coordrob[portar].angle < 255) {ctr[portar].right= 50; ctr[portar].left= -50; ctr[portar].time = 30;
-                                           }
-        }
+            else
+                  if (ypsus - coordrob[portar].y >15)
+                        {
+                            ctr[portar].left = 40;
+                            ctr[portar].right = 40;
+                            ctr[portar].time = timpmiscareportar;
+                        }
+                        else
+                        if (coordrob[portar].y - ypjos > 15)
+                        {
+                            ctr[portar].left = -40;
+                            ctr[portar].right = -40;
+                            ctr[portar].time = timpmiscareportar;
+                        }
+                        else
+                        if (coordrob[portar].angle > 285) {ctr[portar].right= -40; ctr[portar].left= 40;ctr[portar].time=20;
+                                                   }
+                        else
+                        if (coordrob[portar].angle < 255) {ctr[portar].right= 40; ctr[portar].left= -40; ctr[portar].time = 20;
+                                                   }
+                }
         else
-    {*/printf ("\n portar x:%d    y:%d    \n'\n",coordrob[portar].x,coordrob[portar].y);
+    {printf ("\n portar x:%d    y:%d    \n'\n",coordrob[portar].x,coordrob[portar].y);
     if ((abs(coordrob[portar].y - ypsus)< 15)   && (coordrob[minge].y < coordrob[portar].y))
     {
     	ctr[portar].right = 0;
@@ -172,7 +185,7 @@ void progportar ()
     	ctr[portar].right = -40;
     	ctr[portar].time = timpmiscareportar;
     }
-    //}
+    }
 }
 
 
@@ -188,48 +201,6 @@ int unghiuldorit(int id,int x,int y)
 	return m;
 
 }
-
-void mergi_drept(int id, int putere, int unghi_dorit)
-{ /*  int dist2 = distanta(coordrob[id].x,coordrob[id].y,coordrob[minge].x,coordrob[minge].y);
-
-    while (dist2 > 20)
-    {*/
-	int eroare= unghi_dorit - coordrob[id].angle;
-
-	if((unghi_dorit>90 ) && (unghi_dorit<270))
-	{
-		if (eroare<0)
-		{
-			ctr[id].left  = putere + corectie;
-			ctr[id].right = putere - corectie;
-			ctr[id].time   = tcorectie;
-		}
-		else
-		{
-			ctr[id].left  = putere - corectie;
-			ctr[id].right = putere +corectie;
-			ctr[id].time   = tcorectie;
-		}
-	}
-	else
-	{
-		if (eroare<0)
-		{
-			ctr[id].left  = putere - corectie;
-			ctr[id].right = putere + corectie;
-			ctr[id].time   = tcorectie;
-		}
-		else
-		{
-			ctr[id].left  = putere + corectie;
-			ctr[id].right = putere - corectie;
-			ctr[id].time   = tcorectie;
-		}
-	}
-	/*dist2 = distanta(coordrob[id].x,coordrob[id].y,coordrob[minge].x,coordrob[minge].y);
-
-    }
-	 */}
 
 int travel (char* idid, int id, int x, int y)
 {
@@ -253,8 +224,8 @@ void calculate_robot_next_movement() {
 	//Orienteaza-te la un anumit unghi
 	struct robotCoords thisR = coordrob[atacant];
 	double m = unghiuldorit(minge, coordrob[atacant].x,coordrob[atacant].y);
+	double m2 = unghiuldorit(minge, coordrob[fundas].x,coordrob[fundas].y);
 	// Vreau la 90deg
-	if (coordrob[atacant].y < coordrob[minge].y)
 	if((thisR.angle> (m - 15)) && (thisR.angle < (m + 15))) {
 			//mergi_drept(atacant,100,m);
 			travel(idatacant,atacant,coordrob[minge].x,coordrob[minge].y);
@@ -263,6 +234,15 @@ void calculate_robot_next_movement() {
 			ctr[atacant].left = 70;
 			ctr[atacant].right = -20;
 			ctr[atacant].time = 30;
+		}
+    if((coordrob[fundas].angle> (m - 15)) && (coordrob[fundas].angle < (m + 15))) {
+			//mergi_drept(atacant,100,m);
+			travel(idfundas,fundas,coordrob[minge].x,coordrob[minge].y);
+		}
+		else {
+			ctr[fundas].left = 70;
+			ctr[fundas].right = -20;
+			ctr[fundas].time = 30;
 		}
 	progportar();
 }
@@ -277,6 +257,8 @@ void do_robot_control_loop() {
 
 	mosquitto_publish(mosq, &mid, idatacant, sizeof(struct control), &ctr[atacant], 0, false);
 	mosquitto_publish(mosq, &mid, idportar, sizeof(struct control), &ctr[portar], 0, false);
+	mosquitto_publish(mosq, &mid, idfundas, sizeof(struct control), &ctr[fundas], 0, false);
+
 	//mosquitto_loop(mosq, 1, 50);
 	gettimeofday(&tv, NULL);
 }
