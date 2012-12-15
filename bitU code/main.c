@@ -255,13 +255,7 @@ void calculate_robot_next_movement() {
 	double m = unghiuldorit(minge, coordrob[atacant].x,coordrob[atacant].y);
 	// Vreau la 90deg
 	if (coordrob[atacant].y < coordrob[minge].y)
-	{if (thisR.angle > 360 - m - 25 && thisR.angle < 360 - m + 25)
-	{
-		travel(idatacant,atacant,coordrob[minge].x,coordrob[minge].y);
-	}
-	}
-	else
-		if(thisR.angle> m - 25 && thisR.angle < m + 25) {
+	if((thisR.angle> (m - 15)) && (thisR.angle < (m + 15))) {
 			//mergi_drept(atacant,100,m);
 			travel(idatacant,atacant,coordrob[minge].x,coordrob[minge].y);
 		}
