@@ -77,27 +77,6 @@ void connect_callback(struct mosquitto *mosq, void *obj, int result)
 
 void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
-<<<<<<< HEAD
-	struct robotCoords *coordonate = (struct robotCoords *)message->payload;
-	if (coordonate->id == minge)
-	{if (coordonate->x != 0 && coordonate->y != 0)
-	{
-		coordrob[coordonate->id].angle = coordonate->angle;
-		coordrob[coordonate->id].timestamp = coordonate->timestamp;
-		coordrob[coordonate->id].x = coordonate->x;
-		coordrob[coordonate->id].y = coordonate->y;
-
-		//       printf ("coord %d", coordrob[coordonate->id].x);
-	}
-	}
-	else
-	{
-		coordrob[coordonate->id].angle = coordonate->angle;
-		coordrob[coordonate->id].timestamp = coordonate->timestamp;
-		coordrob[coordonate->id].x = coordonate->x;
-		coordrob[coordonate->id].y = coordonate->y;
-	}
-=======
     struct robotCoords *coordonate = (struct robotCoords *)message->payload;
 	if (coordonate->id == 0)
         {if (coordonate->x != 0 && coordonate->y != 0)
@@ -115,18 +94,7 @@ void message_callback(struct mosquitto *mosq, void *obj, const struct mosquitto_
             coordrob[coordonate->id].x = coordonate->x;
             coordrob[coordonate->id].y = coordonate->y;
             }
->>>>>>> 354454d88884fd15ece5f6e59efc258b68194f8f
 
-}
-int cadran(int x, int y) {
-	if (x > 0 && y > 0)
-		return 1;
-	if (x < 0 && y > 0)
-		return 2;
-	if (x < 0 && y < 0)
-		return 3;
-	if (x > 0 && y < 0)
-		return 4;
 }
 void progportar ()
 {   if (coordrob[minge].x > 430)   //se schimba daca jucam in partea dreapta
@@ -168,7 +136,7 @@ void progportar ()
                 }
         else
     {printf ("\n portar x:%d    y:%d    \n'\n",coordrob[portar].x,coordrob[portar].y);
-    if ((abs(coordrob[portar].y - ypsus)< 15)   && (coordrob[minge].y < coordrob[portar].y))
+    if ((abs(coordrob[portar].y - ypsus)< 15)  && (coordrob[minge].y < coordrob[portar].y))
     {
     	ctr[portar].right = 0;
     	ctr[portar].left = 0;
@@ -252,48 +220,65 @@ int travel (char* idid, int id, int x, int y)
 	return distance;
 }
 
+int cadran(int x, int y)
+{
+    if (x > 430 && y > 350)
+    return 1;
+    if (x < 430 && y > 350)
+    return 2;
+    if (x < 430 && y < 350)
+    return 3;
+    if (x > 430 && y < 350)
+    return 4;
+}
+
 void calculate_robot_next_movement() {
 	//Orienteaza-te la un anumit unghi
 	struct robotCoords thisR = coordrob[atacant];
 	double m = unghiuldorit(minge, coordrob[atacant].x,coordrob[atacant].y);
 	double m2 = unghiuldorit(minge, coordrob[fundas].x,coordrob[fundas].y);
-	// Vreau la 90deg
+	// Vreau la m/m2 deg
 	if((thisR.angle> (m - 15)) && (thisR.angle < (m + 15))) {
-<<<<<<< HEAD
-		//mergi_drept(atacant,100,m);
-		travel(idatacant,atacant,coordrob[minge].x,coordrob[minge].y);
-	}
-	else {
-		ctr[atacant].left = 70;
-		ctr[atacant].right = -20;
-		ctr[atacant].time = 30;
-	}
-=======
-			//mergi_drept(atacant,100,m);
 			travel(idatacant,atacant,coordrob[minge].x,coordrob[minge].y);
 		}
 		else {
-			ctr[atacant].left = 70;
-			ctr[atacant].right = -20;
-			ctr[atacant].time = 30;
-		}
-    if((coordrob[fundas].angle> (m - 15)) && (coordrob[fundas].angle < (m + 15))) {
-			//mergi_drept(atacant,100,m);
+		    if (coordrob[atacant].angle - m < 0)
+                {
+                    ctr[atacant].left = 70;
+                    ctr[atacant].right = -20;
+                    ctr[atacant].time = 30;
+                }
+                else
+                     {
+                        ctr[atacant].left = -20;
+                        ctr[atacant].right = 70;
+                        ctr[atacant].time = 30;
+                    }
+            }
+    if((coordrob[fundas].angle> (m2 - 15)) && (coordrob[fundas].angle < (m2 + 15))) {
 			travel(idfundas,fundas,coordrob[minge].x,coordrob[minge].y);
 		}
 		else {
-			ctr[fundas].left = 70;
-			ctr[fundas].right = -20;
-			ctr[fundas].time = 30;
-		}
->>>>>>> 354454d88884fd15ece5f6e59efc258b68194f8f
+		    if (coordrob[fundas].angle - m < 0)
+                {
+                    ctr[fundas].left = 70;
+                    ctr[fundas].right = -20;
+                    ctr[fundas].time = 30;
+                }
+                else
+                     {
+                    ctr[fundas].left = -20;
+                    ctr[fundas].right = 70;
+                    ctr[fundas].time = 30;
+                    }
+            }
 	progportar();
 }
 
 void do_robot_control_loop() {
 	int mid;
 
-	printf("Angle: %d\n", coordrob[atacant].angle);
+	//printf("Angle: %d\n", coordrob[atacant].angle);
 	fflush(stdout);
 
 	calculate_robot_next_movement();
@@ -302,7 +287,6 @@ void do_robot_control_loop() {
 	mosquitto_publish(mosq, &mid, idportar, sizeof(struct control), &ctr[portar], 0, false);
 	mosquitto_publish(mosq, &mid, idfundas, sizeof(struct control), &ctr[fundas], 0, false);
 
-	//mosquitto_loop(mosq, 1, 50);
 	gettimeofday(&tv, NULL);
 }
 
@@ -320,6 +304,7 @@ int need_to_send() {
 
 	return 0;
 }
+
 int main(int argc, char *argv[])
 {
 	char clientid[24]="FcBitu'";
@@ -340,13 +325,12 @@ int main(int argc, char *argv[])
 				sleep(2);
 				printf ("\n run: %d   rc: %d  \n", run,rc);
 				mosquitto_reconnect(mosq);
-			}
+                }
 			// incepe softul propriuzis
 			calculate_robot_next_movement();
 
 			if(need_to_send())
 			{
-				printf ("coaieieeeeeieeieiie \n\n\n");
 				do_robot_control_loop();
 			}
 			fflush(stdout);
